@@ -1,2 +1,2 @@
-echo "HEllo"
+hello from main
 
