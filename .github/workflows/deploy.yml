@@ -1,4 +1,4 @@
-name: Deploy to Server
+name: Deploy Project
 
 on:
   push:
@@ -10,14 +10,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Connect and Deploy
+      - name: Deploy to Server
         uses: appleboy/ssh-action@v0.1.6
         with:
           host: ${{ secrets.HOST }}
-          username: ${{ secrets.USER }}
+          username: ubuntu
           key: ${{ secrets.SSH_KEY }}
           script: |
-            cd /home/ubuntu/app
+            cd final-project
             git pull
-            docker-compose down
-            docker-compose up -d
+            docker build -t final-app .
+            docker stop app || true
+            docker rm app || true
+            docker run -d -p 80:80 --name app final-app
+ 
+
+ 
